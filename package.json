@@ -1,0 +1,29 @@
+{
+  "name": "blog-api2",
+  "version": "1.0.0",
+  "description": "NODEJS BLOG API USING MONGODB",
+  "keywords": [
+    "Nodejs",
+    "express",
+    "mongoose"
+  ],
+  "license": "ISC",
+  "author": "Dott-Tech",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cloudinary": "^1.41.3",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.0.1",
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0",
+    "nodemon": "^3.1.11"
+  }
+}
