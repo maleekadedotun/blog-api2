@@ -34,43 +34,30 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/categories", categoryRouter);
 
-// Error Handler middleware
-app.use(globalErrorHandler);
+
 
 // 404 error
-app.use((req, res) => {
-    // console.log(req.originalUrl);
-    
-    res.status(404).json({
-        status: "Failed",
-        message: `${req.originalUrl} - Route not found`
-    });     
+// 404 handler FIRST
+app.use((req, res, next) => {
+  res.status(404).json({
+    status: "Failed",
+    message: `${req.originalUrl} - Route not found`
+  });
 });
 
-app.delete("/api/v1/users/delete/:id", async(req, res) => {
-    try {
-        res.json({
-            status: "Success",
-            data: "User delete route"
-        })
-    } catch (error) {
-        res.json(error.message);
-        
-    }
-});
+console.log(process.env.CLOUDINARY_NAME, "cloud");
 
-// PUT/api/v1/users/update
-app.put("/api/v1/users/update/:id", async(req, res) => {
-    try {
-        res.json({
-            status: "Success",
-            data: "User Updated route"
-        })
-    } catch (error) {
-        res.json(error.message);
-        
-    }
-})
+// Error Handler middleware
+app.use((err, req, res, next) => {
+    console.log(err);
+
+    res.status(500).json({
+        status: "failed",
+        message: err.message,
+        stack: err.stack,
+    });
+});
+app.use(globalErrorHandler);
 // post routes
 // comment routes
 // category routes

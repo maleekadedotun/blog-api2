@@ -3,50 +3,61 @@ const User = require("../../model/User/User");
 const generateToken = require("../../utils/generateToken");
 // const getTokenFromHeaders = require("../../utils/getTokenFromHeaders");
 const { appErr, AppErr } = require("../../utils/appErr");
+// const AppErr = require("../../utils/appErr");
 const Post = require("../../model/Post/Post");
 const Category = require("../../model/Category/category");
 const Comment = require("../../model/Comment/comment");
 
+// const { AppErr } = require("../../utils/appErr");
+
 const userRegisterCtrl = async (req, res, next) => {
-    const { firstName, lastName, email, password } = req.body;
+    console.log("NEXT TYPE:", typeof next);
     try {
+        const { firstName, lastName, email, password } = req.body;
+
         const emailExists = await User.findOne({ email });
         if (emailExists) {
-            next(new AppErr("Email already exists", 500));
+            return next(new AppErr("Email already exists", 400));
         }
-        // hash password
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        // create user
+
         const user = await User.create({
             firstName,
             lastName,
             email,
-            password: hashedPassword
+            password: hashedPassword,
         });
+
         res.json({
             status: "Success",
             data: user,
-        })
-    } catch (error) {
-        next(appErr(error.message));
+        });
 
+    } catch (error) {
+        next(new AppErr(error.message, 500));
     }
-}
+};
 
 const userLoginCtrl = async (req, res, next) => {
+    console.log({
+        req: typeof req,
+        res: typeof res,
+        next: typeof next
+    });
     const { email, password } = req.body;
     try {
         // check if email exists
         const userFound = await User.findOne({ email });
         if (!userFound) {
             // throw new Error("Invalid login credentials");
-           return next(appErr("Invalid login credentials"))
+            return next(appErr("Invalid login credentials"))
         }
         // check if password matches
         const isPasswordMatched = await bcrypt.compare(password, userFound.password);
         if (!isPasswordMatched) {
-           return next(appErr("Invalid login credentials"))
+            return next(appErr("Invalid login credentials"))
 
         }
         res.json({
@@ -128,7 +139,7 @@ const updatePassswordCtrl = async (req, res, next) => {
                 data: "Password has been changed or updated successfully",
             })
         }
-        else{
+        else {
             return next(appErr("Please provide a new password", 400))
         }
 
@@ -243,7 +254,7 @@ const unfollowCtrl = async (req, res, next) => {
 
         }
     } catch (error) {
-       return next(appErr(error.message))
+        return next(appErr(error.message))
 
     }
 }
@@ -371,7 +382,7 @@ const adminBlockedUserCtrl = async (req, res, next) => {
             })
         }
     } catch (error) {
-       return next(appErr(error.message))
+        return next(appErr(error.message))
 
     }
 }
@@ -395,7 +406,7 @@ const adminUnBlockedUserCtrl = async (req, res, next) => {
             })
         }
     } catch (error) {
-       return next(appErr(error.message))
+        return next(appErr(error.message))
 
     }
 }
@@ -420,7 +431,7 @@ const getUserProfileCtrl = async (req, res) => {
             data: user,
         })
     } catch (error) {
-         return next(appErr(error.message))
+        return next(appErr(error.message))
 
     }
 }

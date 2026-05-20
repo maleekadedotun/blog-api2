@@ -8,12 +8,22 @@ const appErr = (message, statusCode) => {
 }
 
 // Err class
+// class AppErr extends Error {
+//     constructor(message, statusCode) {
+//         super(message);
+//         this.statusCode = statusCode;
+//         this.status = "failed";
+//     }
+// }
+
 class AppErr extends Error {
-    constructor(message, statusCode) {
-        super(message);
-        this.statusCode = statusCode;
-        this.status = "failed";
-    }
+  constructor(message, statusCode) {
+    super(message);
+    this.statusCode = statusCode;
+    this.status = "failed";
+  }
 }
 
-module.exports = {appErr, AppErr};
+// module.exports = { AppErr };
+
+module.exports = { appErr, AppErr};
